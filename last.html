@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Music Website</title>
+</head>
+<body>
+    <header>
+        <div class="menu_side">
+            <a href="main.php" style="text-decoration: none;">
+                <h1 style="color: #FF5733;">
+                    <i class="bi bi-activity" style="color: #3498db;">&nbsp;</i>Freq
+                </h1>
+            </a>
+
+             <h1>Playlist</h1>
+            <div class="playlist">
+                <h4 class="active"><span></span><i class="bi bi-music-note"></i> Playlist</h4>
+               
+                <h4><span></span><i class="bi bi-music-note"></i> Recommended</h4>
+            </div>
+        </div>
+
+        <div class="song_side">
+            <nav>
+                <ul>
+                    <li><a href="main.php" style="text-decoration: none; color: rgb(247, 247, 247);">DISCOVER<span></span></a></li>
+
+                    <li><a href="subscription.html" style="color: white;">Subscribe</a></li>
+
+
+                    
+                </ul>
+                <div class="search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search Music...">
+                </div>
+            </nav>
+            <div class="content">
+                <h1>Recommended Song</h1>
+                <div id="lastListening" class="last-listening">
+                    <p>Loading last listened song...</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script src="script_a.js"></script>
+</body>
+</html>

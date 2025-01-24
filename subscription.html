@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-left: 25px;
+        }
+
+        #studentOptions {
+            margin-top: 20px;
+        }
+
+        #studentForm {
+            background: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: #fff;
+            background: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }  .btn-back {
+            background: #6c757d;
+        }
+        .btn-back:hover {
+            background: #57616b;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleStudentVerification() {
+            const verifyStudent = document.getElementById('verifyStudent');
+            const studentForm = document.getElementById('studentForm');
+            studentForm.style.display = verifyStudent.checked ? 'block' : 'none';
+        }
+
+        function toggleOptions() {
+            const studentOptions = document.getElementById('studentOptions');
+            const selectedPack = document.querySelector('input[name="pack"]:checked').value;
+            studentOptions.style.display = selectedPack === 'student' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>  <a href="main.php" style="text-decoration: none;">
+    <h1 style="color: #FF5733;">
+        <i class="bi bi-activity" style="color: #3498db;">&nbsp;</i>Freq
+    </h1>
+</a>
+    <div class="container">
+        <h1>Subscription Options</h1>
+        <form action="process_subscription.php" method="post" enctype="multipart/form-data">
+            <label>
+                <input type="radio" name="pack" value="Regular" onclick="toggleOptions()" required>
+                Regular Pack <br>
+                <span class="description">200 TK per month</span>
+            </label>
+            <label>
+                <input type="radio" name="pack" value="student" onclick="toggleOptions()">
+                Student Pack <br>
+                <span class="description">125 TK per month</span>
+            </label>
+            
+            <div id="studentOptions" class="hidden">
+                <label>
+                    <input type="checkbox" id="verifyStudent" onclick="toggleStudentVerification()">
+                    Verify you are a student
+                </label>
+                <div id="studentForm" class="hidden">
+                    <label>
+                        Organization Name: 
+                        <input type="text" name="organization" >
+                    </label>
+                    <label>
+                        Student Email ID: 
+                        <input type="email" name="studentEmail" >
+                    </label>
+                    <label>
+                        Upload Student ID Card:
+                        <input type="file" name="studentIdCard" accept="image/*"  >
+                    </label>
+                </div>
+            </div>
+            <button type="submit">Submit</button><button type='button' class='btn-back' onclick="window.location.href='last.html';">Back</button>
+
+        </form>
+    </div>
+</body>
+</html>

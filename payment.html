@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        .hidden {
+            display: none;
+        }
+        .payment-option {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .back-button {
+            background-color: #6c757d;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function togglePaymentFields() {
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            const cardFields = document.getElementById('cardFields');
+            const mobileOptions = document.getElementById('mobileOptions');
+            const mobileFields = document.getElementById('mobileFields');
+
+            cardFields.classList.add('hidden');
+            mobileOptions.classList.add('hidden');
+            mobileFields.classList.add('hidden');
+
+            if (paymentMethod === 'card') {
+                cardFields.classList.remove('hidden');
+            } else if (paymentMethod === 'mobile') {
+                mobileOptions.classList.remove('hidden');
+            }
+        }
+
+        function handleMobileSelection() {
+            const mobileSelected = document.querySelector('input[name="mobileOption"]:checked');
+            const mobileFields = document.getElementById('mobileFields');
+            if (mobileSelected) {
+                mobileFields.classList.remove('hidden');
+            }
+        }
+
+        async function submitPayment(event) {
+            event.preventDefault();
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+            if (paymentMethod === 'card') {
+                const cardNumber = document.getElementById('cardNumber').value;
+                const securityCode = document.getElementById('securityCode').value;
+                const cardName = document.getElementById('cardName').value;
+
+                if (cardNumber.length === 16 && securityCode.length === 3 && cardName.trim() !== "") {
+                    alert("Payment is done! Enjoy Freq premium");
+                    window.location.href = "last.html";
+                } else {
+                    alert("Please fill in all card details correctly.");
+                }
+            } else if (paymentMethod === 'mobile') {
+                const mobilePhone = document.getElementById('mobilePhone').value;
+                if (mobilePhone.length === 11) {
+                    try {
+                        const response = await fetch('generate_code.php');
+                        const { code } = await response.json();
+                        const userCode = prompt(`Enter the 3-digit code sent to your phone:`);
+
+                        const validationResponse = await fetch('validate_code.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ code: userCode })
+                        });
+                        const validationResult = await validationResponse.json();
+
+                        if (validationResult.success) {
+                            alert("Payment is done! Enjoy Freq premium");
+                            window.location.href = "last.html";
+                        } else {
+                            alert("Code mismatch! Redirecting to payment page.");
+                            window.location.href = "payment.html";
+                        }
+                    } catch (error) {
+                        console.error("Error processing payment:", error);
+                        alert("An error occurred while processing your payment. Please try again.");
+                    }
+                } else {
+                    alert("Please enter a valid 11-digit phone number.");
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <a href="main.php" style="text-decoration: none;">
+        <h1 style="color: #FF5733;">
+            <i class="bi bi-activity" style="color: #3498db;">&nbsp;</i>Freq
+        </h1>
+    </a>
+    <div class="container">
+        <h1>Payment Options</h1>
+        <form onsubmit="submitPayment(event)">
+            <div class="payment-option">
+                <label>
+                    <input type="radio" name="payment" value="card" onclick="togglePaymentFields()" required>
+                    Pay by Card <br>
+                    <span style="color: gray;">(1% charge will be applied)</span>
+                </label>
+            </div>
+            <div class="payment-option">
+                <label>
+                    <input type="radio" name="payment" value="mobile" onclick="togglePaymentFields()">
+                    Pay by Mobile Banking <br>
+                    <span style="color: gray;">(1.5% charge applicable)</span>
+                </label>
+            </div>
+
+            <div id="cardFields" class="hidden">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number (16 digits):</label>
+                    <input type="text" id="cardNumber" maxlength="16" pattern="\d{16}">
+                </div>
+                <div class="form-group">
+                    <label for="securityCode">Security Code (3 digits):</label>
+                    <input type="text" id="securityCode" maxlength="3" pattern="\d{3}">
+                </div>
+                <div class="form-group">
+                    <label for="cardName">Name on Card:</label>
+                    <input type="text" id="cardName">
+                </div>
+            </div>
+
+            <div id="mobileOptions" class="hidden">
+                <h3>Select Mobile Banking Platform:</h3>
+                <label>
+                    <input type="radio" name="mobileOption" value="bkash" onclick="handleMobileSelection()">
+                    bKash
+                </label><br>
+                <label>
+                    <input type="radio" name="mobileOption" value="nagad" onclick="handleMobileSelection()">
+                    Nagad
+                </label><br>
+                <label>
+                    <input type="radio" name="mobileOption" value="rocket" onclick="handleMobileSelection()">
+                    Rocket
+                </label>
+            </div>
+
+            <div id="mobileFields" class="hidden">
+                <div class="form-group">
+                    <label for="mobilePhone">Mobile Banking Phone Number (11 digits):</label>
+                    <input type="text" id="mobilePhone" maxlength="11" pattern="\d{11}">
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+            <button type="button" class="back-button" onclick="window.location.href='subscription.html'">Back</button>
+        </form>
+    </div>
+</body>
+</html>
